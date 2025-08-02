@@ -1,0 +1,84 @@
+<% layout("/layouts/boilerplate") %> 
+
+
+<div class="container mt-4">
+  <div class="d-flex flex-wrap justify-content-center gap-3 filter-bar mb-5">
+    <div class="filter-item">
+      <i class="fas fa-mountain"></i>
+      <span>Mountain Villages</span>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-monument"></i>
+      <span>Heritage Homes</span>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-spa"></i>
+      <span>Wellness</span>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-utensils"></i>
+      <span>Homely Food</span>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-tractor"></i>
+      <span>Farm Stays</span>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-water"></i>
+      <span>Lake View</span>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-theater-masks"></i>
+      <span>Cultural Events</span>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-hiking"></i>
+      <span>Hiking Base</span>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-hand-sparkles"></i>
+      <span>Handicrafts</span>
+    </div>
+    <div class="filter-item">
+      <i class="fas fa-campground"></i>
+      <span>Rustic Retreats</span>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  <% for (let listing of allListings) { %>
+
+    <div class="col">
+      <div class="card h-100 shadow-sm">
+        <a href="/listings/<%= listing._id %>" style="text-decoration: none; color: inherit;">
+          <img 
+            src="<%= listing.image && listing.image.url ? listing.image.url : 'https://unsplash.com/photos/houses-overlooking-mountain-range-xyE1p1rG04U' %>" 
+            alt="Listing image for <%= listing.title %>" 
+            class="card-img-top"
+            style="height: 250px; object-fit: cover; border-radius: 1rem;" 
+          />
+        
+
+          <div class="card-body">
+            <h5 class="card-title"><b><%= listing.title %></b></h5>
+            <p class="card-text">
+              &#36;<%= listing.price.toLocaleString("en-US") %> / night<br />
+              <%= listing.location %>, <%= listing.country %>
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+  <% } %>
+</div>
+
+
+
+
+
+

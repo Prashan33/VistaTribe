@@ -1,0 +1,82 @@
+<% layout("/layouts/boilerplate") %>
+<div class="row">
+  <div class="col-8 offset-2">
+    <h3 class="my-4">Create a New Listing</h3>
+
+    <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
+
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input id="title" name="listing[title]" placeholder="Enter title" type="text" class="form-control" required>
+        <div class="valid-feedback">Title looks good!</div>
+        <div class="invalid-feedback">Please provide a title.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea id="description" name="listing[description]" class="form-control" rows="3" placeholder="Enter description" required></textarea>
+        <div class="valid-feedback">Description looks good!</div>
+        <div class="invalid-feedback">Please provide a description.</div>
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">Select a Category</label>
+        <select class="form-select" id="category" name="listing[category]" required>
+          <option selected disabled value="">Choose one...</option>
+          <option>Mountain Villages</option>
+          <option>Heritage Homes</option>
+          <option>Wellness</option>
+          <option>Homely Food</option>
+          <option>Farm Stays</option>
+          <option>Lake View</option>
+          <option>Cultural Events</option>
+          <option>Hiking Base</option>
+          <option>Handicrafts</option>
+          <option>Rustic Retreats</option>
+        </select>
+      </div>
+      
+      
+
+      <div class="mb-3">
+        <label for="image" class="form-label">Image URL</label>
+        <input id="image" name="listing[image]" placeholder="Enter image URL" type="text" class="form-control">
+        <div class="valid-feedback">Looks good!</div>
+        <div class="invalid-feedback">Please provide a valid image URL.</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="image" class="form-label">Upload Listing Image</label>
+        <input id="image" name="listing[image]"  type="file" class="form-control">
+        <div class="valid-feedback">Looks good!</div>
+        required
+        <div class="invalid-feedback">Please provide a valid image URL.</div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="price" class="form-label">Price</label>
+          <input id="price" name="listing[price]" placeholder="Enter price" type="number" class="form-control" required>
+          <div class="valid-feedback">Price looks good!</div>
+          <div class="invalid-feedback">Please enter a valid price.</div>
+        </div>
+        <div class="col-md-6">
+          <label for="country" class="form-label">Country</label>
+          <input id="country" name="listing[country]" placeholder="Enter country" type="text" class="form-control" required>
+          <div class="valid-feedback">Country looks good!</div>
+          <div class="invalid-feedback">Please provide a country.</div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input id="location" name="listing[location]" placeholder="Enter location" type="text" class="form-control" required>
+        <div class="valid-feedback">Location looks good!</div>
+        <div class="invalid-feedback">Please enter a location.</div>
+      </div>
+
+      <button type="submit" class="btn btn-dark">Add Listing</button>
+      <br /><br />
+
+    </form>
+  </div>
+</div>

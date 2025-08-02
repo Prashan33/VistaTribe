@@ -1,0 +1,162 @@
+<% layout("/layouts/boilerplate") %>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/starability/2.4.2/starability-minified/starability-all.min.css">
+
+<div class="container my-4">
+  <h3 class="text-center mb-4"><%= listing.title %></h3>
+
+  <div class="d-flex flex-column align-items-center">
+    <div class="card shadow" style="width: 42rem;">
+      <img 
+        src="<%= listing.image.url  %>" 
+        alt="Listing image for <%= listing.title %>" 
+        class="card-img-top"
+        style="height: 250px; object-fit: cover;"
+      >
+      <div class="card-body">
+        <p class="card-text">
+          <strong>Price:</strong> $<%= listing.price.toLocaleString("en-US") %><br />
+          <strong>Location:</strong> <%= listing.location %>, <%= listing.country %><br />
+          <strong>Owned by:</strong> <%= listing.owner?.username || "Unknown" %>
+        </p>
+        <p class="card-text"><strong>Description:</strong> <%= listing.description %></p>
+      </div>
+    </div>
+
+    <% if (currentUser && listing.owner && listing.owner.equals(currentUser._id)) { %>
+      <div class="mt-3 d-flex justify-content-center gap-2">
+        <a href="/listings/<%= listing._id %>/edit" class="btn btn-warning">Edit this Listing</a>
+        <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE" class="d-inline">
+          <button class="btn btn-outline-danger">Delete this listing</button>
+        </form>
+      </div>
+    <% } %>
+  </div>
+
+  <% if (currentUser) { %>
+    <div class="container my-5">
+      <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+          <h4 class="text-center mb-4">Leave a Review</h4>
+          <form method="POST" action="/listings/<%= listing._id %>/reviews" class="p-3 border rounded shadow-sm needs-validation" novalidate>
+            <div class="mb-3">
+              <label class="form-label d-block">Rating</label>
+              <fieldset class="starability-slot">
+                <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+                <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+                <label for="first-rate1" title="Terrible">1 star</label>
+                <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+                <label for="first-rate2" title="Not good">2 stars</label>
+                <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+                <label for="first-rate3" title="Average">3 stars</label>
+                <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+                <label for="first-rate4" title="Very good">4 stars</label>
+                <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+                <label for="first-rate5" title="Amazing">5 stars</label>
+              </fieldset>
+            </div>
+
+            <div class="mb-3">
+              <label for="review" class="form-label">Review</label>
+              <textarea id="review" name="review[content]" class="form-control" rows="5" placeholder="Write your review..." required></textarea>
+            </div>
+
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary">Submit Review</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  <% } else { %>
+    <div class="text-center my-5">
+      <p class="lead">You must <a href="/login">log in</a> to leave a review.</p>
+    </div>
+  <% } %>
+
+  <div class="container mt-5">
+    <div class="row">
+      <!-- Reviews Column -->
+      <div class="col-md-12">
+        <h4 class="mb-3">Reviews:</h4>
+        <div class="row" id="review-container">
+          <% listing.reviews.slice(0, 3).forEach(review => { %>
+            <div class="col-md-4 mb-4 review-card">
+              <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                  <h5 class="card-title"><%= review.author?.username || "Anonymous" %></h5>
+                  <p class="starability-result" data-rating="<%= review.rating %>">
+                    Rated: <%= review.rating %> star<%= review.rating > 1 ? "s" : "" %>
+                  </p>
+                  <p class="card-text"><%= review.content %></p>
+                  <% if (currentUser && review.author && review.author.equals(currentUser._id)) { %>
+                    <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                      <button class="btn btn-outline-danger btn-sm">Delete</button>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+  
+        <% if (listing.reviews.length > 3) { %>
+          <div class="text-center mb-4">
+            <button id="see-more-btn" class="btn btn-outline-primary">See More</button>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+  
+    
+  
+    <!-- Map Section (very bottom) -->
+    <div class="container mt-5">
+      <h4>Location on Map:</h4>
+      <p class="text-muted" style="font-size: 0.9rem; font-style: italic;">
+        📍 Exact location will be shown after booking.
+      </p>
+      <div class="ratio ratio-4x3" style="max-width: 600px; margin: auto;">
+        <iframe
+          style="border:0; border-radius: 8px;"
+          loading="lazy"
+          allowfullscreen
+          referrerpolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps/embed/v1/place?key=<%= mapToken %>&q=<%= listing.location %>,<%= listing.country %>">
+        </iframe>
+      </div>
+    </div>
+    
+    <script>
+      const seeMoreBtn = document.getElementById("see-more-btn");
+      const reviewContainer = document.getElementById("review-container");
+    
+      if (seeMoreBtn) {
+        seeMoreBtn.addEventListener("click", () => {
+          reviewContainer.innerHTML = `
+            <% listing.reviews.forEach(review => { %>
+              <div class="col-md-4 mb-4 review-card">
+                <div class="card h-100 shadow-sm">
+                  <div class="card-body">
+                    <h5 class="card-title"><%= review.author?.username || "Anonymous" %></h5>
+                    <p class="starability-result" data-rating="<%= review.rating %>">
+                      Rated: <%= review.rating %> star<%= review.rating > 1 ? "s" : "" %>
+                    </p>
+                    <p class="card-text"><%= review.content %></p>
+                    <% if (currentUser && review.author && review.author.equals(currentUser._id)) { %>
+                      <form method="POST" action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE">
+                        <button class="btn btn-outline-danger btn-sm">Delete</button>
+                      </form>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          `;
+          seeMoreBtn.remove();
+        });
+      }
+    </script>
+    
