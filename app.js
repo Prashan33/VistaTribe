@@ -86,14 +86,20 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get("/", (req, res) => {
+  res.redirect("/listings");
+});
+
 // Mount routes
 app.use("/listings", listingRoutes);
 app.use("/listings/:id/reviews", reviewRoutes);
 app.use("/", userRoutes);
 
+
+
 // 404 handler
 app.use((req, res, next) => {
-  next(new ExpressError("Page Not Found", 404)); // ✅ fixed argument order
+  next(new ExpressError("Page Not Found", 404)); 
 });
 
 // Global error handler
