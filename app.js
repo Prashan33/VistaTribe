@@ -104,7 +104,14 @@ app.use((req, res, next) => {
 
 // Global error handler
 app.use((err, req, res, next) => {
+  console.error(err);
+
+  if (res.headersSent) {
+    return next(err);
+  }
+
   const { statusCode = 500, message = "Something went wrong!" } = err;
+
   res.status(statusCode).send(`
     <html>
       <body style="font-family: Arial, sans-serif; text-align: center; padding: 50px;">
@@ -116,7 +123,10 @@ app.use((err, req, res, next) => {
   `);
 });
 
+
 // Start server
-app.listen(8080, () => {
-  console.log("🚀 Server running at http://localhost:8080");
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`🚀 Server running on port ${port}`);
 });
+
