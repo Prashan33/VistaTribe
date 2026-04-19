@@ -233,6 +233,6 @@ Visit [http://localhost:8080](http://localhost:8080).
 **Prashan Adhikari**
 
 Full-stack developer with a focus on practical, user-facing web products.
-- Email: [prasuadhikari33@gmail.com](mailto:prasuadhikari33@gmail.com)
+- Email: [prashanadhikari2486@gmail.com](mailto:prashanadhikari2486@gmail.com)
 
 > VistaTribe is a solo-built project designed to showcase end-to-end web engineering — from database schema and authentication to cloud media, deployment, and a polished user experience.
